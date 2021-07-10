@@ -12,14 +12,14 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 class Person:
-    def __init__(self, hp, mp, atk, def, magic):
+    def __init__(self, hp, mp, atk, defence, magic):
        self.maxhp = hp
        self.hp = hp
        self.maxmp = mp
        self.mp = mp
        self.atklow = atk - 10
        self.atkhigh = atk + 10
-       self.def = def
+       self.defence = defence
        self.magic = magic
        self.actions = ["Attack", "Magic"]
     
