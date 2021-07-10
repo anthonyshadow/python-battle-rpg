@@ -1,6 +1,7 @@
 import random
 
 
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -27,19 +28,19 @@ class Person:
     def generate_damage(self):
         return random.randrange(self.atklow, self.atkhigh)
     
-    # function to generate how much damage is done by spells
-    # dmg property comes from the array of objects displaying magical spells, i is the integer in the array which will represent each spell
-    def generate_spell_damage(self, i):
-        magiclow =self.magic[i]["dmg"] - 5
-        magichigh =self.magic[i]["dmg"] + 5
-        return random.randrange(magiclow, magichigh)
-    
     #  function for player/enemy to take damage
     def take_damage(self, dmg):
         self.hp -= dmg
         if self.hp < 0:
             self.hp = 0
         return self.hp
+    
+    def heal(self, dmg):
+        self.hp +=dmg
+        if self.hp > self.maxhp:
+            self.hp = self.maxhp
+        return self.hp
+
 
     # Utility functions
     def get_hp(self):
@@ -58,14 +59,6 @@ class Person:
     def reduce_mp(self, cost):
         self.mp -= cost
     
-    # function that tells user what spell they have chosen
-    def get_spell_name(self, i):
-        return self.magic[i]["name"]
-    
-    # function that gets spells mp cost
-    def get_spell_mp_cost(self, i):
-        return self.magic[i]["cost"]
-    
     # Function to allow user to choose action
     def choose_action(self):
         i = 1
@@ -75,11 +68,12 @@ class Person:
             i += 1
     
     # Function to choose spell to use and how much mp it uses
-    def choose_spell(self):
+    def choose_magic(self):
         i = 1
-        print("Magic")
+
+        print(bcolors.OKBLUE + bcolors.BOLD + "Magic" + bcolors.ENDC)
         for spell in self.magic:
-            print(str(i) + ":", spell["name"], "(cost:", str(spell["mp"]) + ")")
+            print(str(i) + ":", spell.name, "(cost:", str(spell.cost) + ")")
             i += 1
 
 
