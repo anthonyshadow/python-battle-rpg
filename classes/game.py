@@ -13,7 +13,7 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 class Person:
-    def __init__(self, hp, mp, atk, defence, magic):
+    def __init__(self, hp, mp, atk, defence, magic, items):
        self.maxhp = hp
        self.hp = hp
        self.maxmp = mp
@@ -22,7 +22,8 @@ class Person:
        self.atkhigh = atk + 10
        self.defence = defence
        self.magic = magic
-       self.actions = ["Attack", "Magic"]
+       self.items = items
+       self.actions = ["Attack", "Magic", "Items"]
     
     # function to generate how much damage is done by attacks
     def generate_damage(self):
@@ -41,7 +42,7 @@ class Person:
             self.hp = self.maxhp
         return self.hp
 
-
+ 
     # Utility functions
     def get_hp(self):
         return self.hp
@@ -58,22 +59,37 @@ class Person:
     # function that reduces mp when magic spells are used
     def reduce_mp(self, cost):
         self.mp -= cost
+
+    # def get_spell_name(self, i):
+    #     return self.magic[i]["name"]
+
+    # def get_spell_mp_cost(self, i):
+    #     return self.magic[i]["cost"]
     
     # Function to allow user to choose action
     def choose_action(self):
         i = 1
-        print("Actions")
+        print("\n" + "Actions")
         for item in self.actions:
-            print(str(i) + ":", item)
+            print("    " + str(i) + ":", item)
             i += 1
     
     # Function to choose spell to use and how much mp it uses
     def choose_magic(self):
         i = 1
 
-        print(bcolors.OKBLUE + bcolors.BOLD + "Magic" + bcolors.ENDC)
+        print("\n" + bcolors.OKBLUE + bcolors.BOLD + "Magic" + bcolors.ENDC)
         for spell in self.magic:
-            print(str(i) + ":", spell.name, "(cost:", str(spell.cost) + ")")
+            print("    " + str(i) + ":", spell.name, "(cost:", str(spell.cost) + ")")
+            i += 1
+
+    # Function to choose Items
+    def choose_item(self):
+        i = 1
+
+        print("\n" + bcolors.OKGREEN + bcolors.BOLD + "Items" +bcolors.ENDC)
+        for item in self.items:
+            print("    " + str(i) + ".", item.name, ":", item.description, " (x5)")
             i += 1
 
 
