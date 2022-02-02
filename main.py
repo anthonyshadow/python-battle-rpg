@@ -18,12 +18,14 @@ potion = Item("Potion", "potion", "Heals 50 hp", 50)
 hipotion = Item("Hi-Potion", "potion", "Heals 100 hp", 100)
 superpotion = Item("Super-Potion", "potion", "Heals 500 hp", 500)
 Elixir = Item("Elixir", "elixer", "Fully restores HP/MP of one party member", 9999)
-MegaeElixir = Item("Mega-Elixir", "elixer", "Fully restores party HP/MP", 9999)
+MegaElixir = Item("Mega-Elixir", "elixer", "Fully restores party HP/MP", 9999)
 
 grenade = Item("Grenade", "attack", "deals 500 damage", 500)
 
 player_magic = [fire, thunder, blizzard, meteor, quake, cure, cura]
-player_items = [potion, hipotion, superpotion, Elixir, MegaeElixir, grenade]
+player_items = [{"item": potion, "quantity": 15}, {"item":hipotion,  "quantity": 5}, 
+                {"item": superpotion, "quantity": 1},  {"item": Elixir, "quantity": 5}, {"item": MegaElixir,"quantity": 1},
+                {"item": grenade, "quantity": 10}]
 
 # variables passed to person corresepond to the described persons attributes defined in game
 player = Person(460, 80, 60, 34, player_magic , player_items)
@@ -83,17 +85,31 @@ while running:
         if item_choice == -1:
             continue
 
-        item = player.items[item_choice]
+        item = player.items[item_choice]["item"]
 
-        if item.type == "potion";
+        
+        if player.items[item_choice]["quantity"] == 0:
+            print(bcolors.FAIL +"\n" + "None left..." + bcolors.ENDC)
+            continue
+
+        player.items[item_choice]["quantity"] -= 1
+
+
+        if item.type == "potion":
             player.heal(item.prop)
             print(bcolors.OKGREEN + "\n" + item.name + "heals for", str(item.prop), "HP" + bcolors.ENDC)
-    
+        elif item.type == "elixer":
+            player.hp = player.maxhp
+            player.mp = player.maxmp
+            print(bcolors.OKGREEN + "\n" + item.name + " fullly restores HP/MP" + bcolors.ENDC)
+        elif item.type == "attack":
+            enemy.take_damage(item.prop)
+            print(bcolors.FAIL + "\n" + item.name + "deals", str(item.prop), "points of damage" + bcolors.ENDC)  
     enemy_choice = 1
 
     enemy_dmg = enemy.generate_damage()
     player.take_damage(enemy_dmg)
-    print("Enemy attackcs for", enemy_dmg)
+    print("Enemy attacks for", enemy_dmg)
 
     print("--------------------------")
     print("Enemy's HP:", bcolors.FAIL + str(enemy.get_hp()) + "/" + str(enemy.get_max_hp()) + bcolors.ENDC)
