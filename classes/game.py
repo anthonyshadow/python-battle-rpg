@@ -1,4 +1,5 @@
 import random
+from unicodedata import name
 
 
 
@@ -13,7 +14,7 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 class Person:
-    def __init__(self, hp, mp, atk, defence, magic, items):
+    def __init__(self, name, hp, mp, atk, defence, magic, items):
        self.maxhp = hp
        self.hp = hp
        self.maxmp = mp
@@ -24,6 +25,7 @@ class Person:
        self.magic = magic
        self.items = items
        self.actions = ["Attack", "Magic", "Items"]
+       self.name = name
     
     # function to generate how much damage is done by attacks
     def generate_damage(self):
@@ -69,28 +71,36 @@ class Person:
     # Function to allow user to choose action
     def choose_action(self):
         i = 1
-        print("\n" + "Actions")
+        print("\n" + "    "  +bcolors.BOLD + self.name + bcolors.ENDC)
+        print(bcolors.OKBLUE + bcolors.BOLD + "    Actions" + bcolors.ENDC)
         for item in self.actions:
-            print("    " + str(i) + ":", item)
+            print("        " + str(i) + ":", item)
             i += 1
     
     # Function to choose spell to use and how much mp it uses
     def choose_magic(self):
         i = 1
 
-        print("\n" + bcolors.OKBLUE + bcolors.BOLD + "Magic" + bcolors.ENDC)
+        print("\n" + bcolors.OKBLUE + bcolors.BOLD + "    Magic" + bcolors.ENDC)
         for spell in self.magic:
-            print("    " + str(i) + ":", spell.name, "(cost:", str(spell.cost) + ")")
+            print("        " + str(i) + ":", spell.name, "(cost:", str(spell.cost) + ")")
             i += 1
 
     # Function to choose Items
     def choose_item(self):
         i = 1
 
-        print("\n" + bcolors.OKGREEN + bcolors.BOLD + "Items" +bcolors.ENDC)
+        print("\n" + bcolors.OKGREEN + bcolors.BOLD + "    Items" +bcolors.ENDC)
         for item in self.items:
-            print("    " + str(i) + ".", item["item"].name, ":", item["item"].description, " (x" + str(item["quantity"]) +")")
+            print("        " + str(i) + ".", item["item"].name, ":", item["item"].description, " (x" + str(item["quantity"]) +")")
             i += 1
+    
+    # Function for player stats
+    def get_stats(self):
+        print("                    _________________________                 __________ ")
+        print(bcolors.BOLD + self.name +"    "+
+              str(self.hp) + "/" + str(self.maxhp) +" |" + bcolors.OKGREEN + "█████████████████████████" + bcolors.ENDC + bcolors.BOLD +"|       "+
+              str(self.mp) + "/" + str(self.maxmp) +"   |" + bcolors.OKBLUE + "██████████" + bcolors.ENDC + "|")
 
 
 
