@@ -1,6 +1,7 @@
 from classes.game import Person, bcolors
 from classes.magic import Spell
 from classes.inventory import Item
+import random
 
 
 # Black magic spells
@@ -31,11 +32,11 @@ player_items = [{"item": potion, "quantity": 15}, {"item": hipotion,  "quantity"
                 {"item": grenade, "quantity": 10}]
 
 # variables passed to person corresepond to the described persons attributes defined in game
-player1 = Person("Thor  :", 460, 80, 60, 34, player_magic, player_items)
-player2 = Person("Hulk  :", 460, 80, 60, 34, player_magic, player_items)
-player3 = Person("Capt  :", 460, 80, 60, 34, player_magic, player_items)
+player1 = Person("Thor  :", 1000, 100, 100, 34, player_magic, player_items)
+player2 = Person("Hulk  :", 1000, 100, 100, 34, player_magic, player_items)
+player3 = Person("Capt  :", 1000, 100, 100, 34, player_magic, player_items)
 
-enemy = Person("Thanos:",1200, 65, 45, 25, [], [])
+enemy = Person("Thanos:", 9999, 200, 140, 25, [], [])
 
 players = [player1, player2, player3]
 
@@ -54,6 +55,8 @@ while running:
         player.get_stats()
     
     print("\n")
+
+    enemy.get_enemy_stats()
 
     for player in players:
 
@@ -118,6 +121,10 @@ while running:
                 print(bcolors.OKGREEN + "\n" + item.name +
                     "heals for", str(item.prop), "HP" + bcolors.ENDC)
             elif item.type == "elixer":
+                if item.name == "Mega-Elixir":
+                    for i in players:
+                        i.hp = i.maxhp
+                        i.mp = i.maxmp
                 player.hp = player.maxhp
                 player.mp = player.maxmp
                 print(bcolors.OKGREEN + "\n" + item.name +
@@ -127,14 +134,11 @@ while running:
                 print(bcolors.FAIL + "\n" + item.name + "deals",
                     str(item.prop), "points of damage" + bcolors.ENDC)
     enemy_choice = 1
-
+    target = random.randrange(0, 3)
     enemy_dmg = enemy.generate_damage()
-    player1.take_damage(enemy_dmg)
+    players[target].take_damage(enemy_dmg)
     print("Enemy attacks for", enemy_dmg)
 
-    print("--------------------------")
-    print("Enemy's HP:", bcolors.FAIL + str(enemy.get_hp()) +
-          "/" + str(enemy.get_max_hp()) + bcolors.ENDC)
 
     # Checks on the status of HP of player and enemy to determine if the game should keep running
     if enemy.get_hp() == 0:
