@@ -97,10 +97,35 @@ class Person:
     
     # Function for player stats
     def get_stats(self):
+        hp_bar = ""
+        bar_ticks = (self.hp / self.maxhp) * 100 / 4
+
+        while bar_ticks > 0:
+            hp_bar += "█"
+            bar_ticks -= 1
+        
+        while len(hp_bar) < 25:
+            hp_bar += " "
+        
+        mp_bar = ""
+        mpbar_ticks = (self.mp / self.maxmp) * 100 / 10
+
+        while mpbar_ticks > 0:
+            mp_bar += "█"
+            mpbar_ticks -= 1
+        
+        while len(mp_bar) < 10:
+            mp_bar += " "
+        
+        # chp = self.hp 
+        # shp = ""
+        # if len(chp) < 4:
+        #     while len(shp) < len(chp) - 4:
+
         print("                    _________________________                 __________ ")
         print(bcolors.BOLD + self.name +"    "+
-              str(self.hp) + "/" + str(self.maxhp) +" |" + bcolors.OKGREEN + "█████████████████████████" + bcolors.ENDC + bcolors.BOLD +"|       "+
-              str(self.mp) + "/" + str(self.maxmp) +"   |" + bcolors.OKBLUE + "██████████" + bcolors.ENDC + "|")
+              str(self.hp) + "/" + str(self.maxhp) +" |" + bcolors.OKGREEN + hp_bar + bcolors.ENDC + bcolors.BOLD + "|       "+
+              str(self.mp) + "/" + str(self.maxmp) +"   |" + bcolors.OKBLUE + mp_bar + bcolors.ENDC + "|")
 
 
 
