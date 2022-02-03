@@ -36,9 +36,12 @@ player1 = Person("Thor  :", 1000, 100, 100, 34, player_magic, player_items)
 player2 = Person("Hulk  :", 1000, 100, 100, 34, player_magic, player_items)
 player3 = Person("Capt  :", 1000, 100, 100, 34, player_magic, player_items)
 
-enemy = Person("Thanos:", 9999, 200, 140, 25, [], [])
+enemy1 = Person("Thanos:", 9999, 200, 140, 25, [], [])
+enemy2 = Person("Imp 1 :", 1000, 100, 160, 25, [], [])
+enemy3 = Person("Imp 2 :", 1000, 100, 160, 25, [], [])
 
 players = [player1, player2, player3]
+enemies = [enemy1, enemy2, enemy3]
 
 running = True
 i = 0
@@ -56,7 +59,8 @@ while running:
     
     print("\n")
 
-    enemy.get_enemy_stats()
+    for enemy in enemies:
+        enemy.get_enemy_stats()
 
     for player in players:
 
@@ -70,8 +74,14 @@ while running:
         # Player choosing to attack enemy
         if index == 0:
             dmg = player.generate_damage()
-            enemy.take_damage(dmg)
-            print("You attacked for", dmg, "points of damage.")
+            enemy = player.choose_target(enemies)
+            enemies[enemy].take_damage(dmg)
+            print("You attacked " + enemies[enemy].name.replace(" ", "") + "for," + str(dmg), "points of damage.")
+
+        #removes defeated enemies
+            if enemies[enemy].get_hp() == 0:
+                print(enemies[enemy].name + " has died")
+                del enemies[enemy]
         # if choosing magic, chooses spell and also reduce the cost of the spell from the mp
         elif index == 1:
             player.choose_magic()
@@ -97,9 +107,16 @@ while running:
                 print(bcolors.OKBLUE + "\n" + spell.name +
                     "Heals for ", str(magic_dmg), "HP" + bcolors.ENDC)
             elif spell.type == "black":
-                enemy.take_damage(magic_dmg)
+
+                enemy = player.choose_target(enemies)
+                enemies[enemy].take_damage(magic_dmg)
+
                 print(bcolors.OKBLUE + "\n" + spell.name + " deals",
-                    str(magic_dmg),  "points of damage" + bcolors.ENDC)
+                    str(magic_dmg),  "points of damage to" + enemies[enemy].name.replace(" ", "") + bcolors.ENDC)
+                        #removes defeated enemies
+                if enemies[enemy].get_hp() == 0:
+                    print(enemies[enemy].name + " has died")
+                    del enemies[enemy]
 
         elif index == 2:
             player.choose_item()
@@ -130,20 +147,39 @@ while running:
                 print(bcolors.OKGREEN + "\n" + item.name +
                     " fullly restores HP/MP" + bcolors.ENDC)
             elif item.type == "attack":
-                enemy.take_damage(item.prop)
+                enemy = player.choose_target(enemies)
+                enemies[enemy].take_damage(item.prop)
                 print(bcolors.FAIL + "\n" + item.name + "deals",
-                    str(item.prop), "points of damage" + bcolors.ENDC)
+                    str(item.prop), "points of damage to" + enemies[enemy].name.replace(" ", "") + bcolors.ENDC)
+
+                if enemies[enemy].get_hp() == 0:
+                    print(enemies[enemy].name + " has died")
+                    del enemies[enemy]
     enemy_choice = 1
     target = random.randrange(0, 3)
-    enemy_dmg = enemy.generate_damage()
+    enemy_dmg = enemies[0].generate_damage()
     players[target].take_damage(enemy_dmg)
     print("Enemy attacks for", enemy_dmg)
 
 
     # Checks on the status of HP of player and enemy to determine if the game should keep running
-    if enemy.get_hp() == 0:
+
+    defeated_enemies = 0
+
+    for enemy in enemies:
+        if enemy.get_hp() == 0:
+            defeated_enemies += 1
+
+    if defeated_enemies == 2: 
         print(bcolors.OKGREEN + "You win!" + bcolors.ENDC)
         running = False
-    elif player.get_hp() == 0:
-        print(bcolors.FAIL + "You enemy has defeated you!" + bcolors.ENDC)
+
+    defeated_players = 0
+
+    for player in players:
+        if player.get_hp() == 0:
+            defeated_players += 1
+    
+    if defeated_players == 2:
+        print(bcolors.FAIL + "Your enemies have defeated you!" + bcolors.ENDC)
         running = False
